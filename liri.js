@@ -19,7 +19,7 @@ var valueCommand = process.argv[3];
 
 switch (command){
   case "my-tweets":
-  twitterFunction();
+  twitterFunc();
   break;
   case "spotify-this-song":
   spotifyFunc();
@@ -30,6 +30,8 @@ switch (command){
   case "do-what-it-says":
   doWhatItSays();
   break;
+  default:
+    console.log("Command not recognized");
 }
 
 
@@ -38,6 +40,42 @@ switch (command){
 
 function twitterFunc (){
 
+  var twitterKeys = keys.twitterKeys;
+  // console.log(twitterKeys);
+
+  var Twitter = require("twitter");
+  // console.log(Twitter);
+  
+var client = new Twitter ({
+
+
+
+  consumer_key: twitterKeys.consumer_key,
+  consumer_secret: twitterKeys.consumer_secret,
+  access_token_key: twitterKeys.access_token_key,
+  access_token_secret: twitterKeys.access_token_secret
+
+});
+
+// console.log(client);
+
+//Search command capture
+
+var params = {screen_name: "Mike Brr"};
+  // console.log(params);
+
+  client.get('statuses/user_timeline', {count: 20, trim_user: false, exclude_replies: true, include_rts: false}, function(error, tweets, response) {
+  // client.get("statutes/user_timeline", params, function(error, tweets){
+    if (error) {
+     return console.log(error);
+    }else{
+      console.log("MY TWEETS");
+      for (var i = 0; i < tweets.length; i++) {
+        console.log((i+1) + ". " + tweets[i].text);
+        
+      }
+    }
+  })
 
 }
 
@@ -59,7 +97,7 @@ function OMDBFunc (){
   
       // Parse the body of the site and recover just the imdbRating
       // (Note: The syntax below for parsing isn't obvious. Just spend a few moments dissecting it).
-      console.log("\n/////////////////MOVIE THIS////////////////\n")
+      console.log("MOVIE THIS")
       console.log("Title: " + valueCommand);
       console.log("Year: " + JSON.parse(body)["Year"]);
       console.log("Rating: " + JSON.parse(body)["imdbRating"]);
@@ -67,7 +105,7 @@ function OMDBFunc (){
       console.log("Language: " + JSON.parse(body)["Language"]);
       console.log("Plot: " + JSON.parse(body)["Plot"]);
       console.log("Actors: " + JSON.parse(body)["Actors"]);
-      // console.log("The movie's rating is: " + JSON.parse(body).imdbRating);
+      console.log("The movie's rating is: " + JSON.parse(body).imdbRating);
     }
   });
 
